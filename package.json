@@ -8,6 +8,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "fft.js": "^4.0.4",
     "wavefile": "^11.0.0"
   }
 }
