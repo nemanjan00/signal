@@ -1,0 +1,13 @@
+{
+  "name": "signal",
+  "version": "0.0.0",
+  "description": "2-FSK implementation for communicating over speaker/microphone",
+  "main": "index.js",
+  "repository": "git@github.com:nemanjan00/signal.git",
+  "author": "nemanjan00 <nemanjan00@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "wavefile": "^11.0.0"
+  }
+}
