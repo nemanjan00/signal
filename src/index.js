@@ -1,34 +1,26 @@
-const FFT = require("fft.js");
 const WaveFile = require('wavefile').WaveFile;
 const fs = require("fs");
+
+const tone = require("./tone");
 
 const samplerate = 44100;
 const bitrate = 32;
 
-const tone = require("./tone")(samplerate, 2000, 0.7 * Math.pow(2, bitrate - 1));
+const baudrate = 10;
+const duration = 1000 / baudrate;
 
-const secondTone = tone(1000);
+const code = [
+	tone(samplerate, 2200, 0.7 * Math.pow(2, bitrate - 1))(duration),
+	tone(samplerate, 1200, 0.7 * Math.pow(2, bitrate - 1))(duration)
+];
 
-console.log(Math.max(...secondTone));
+const random = Array(200)
+	.fill(0)
+	.map(() => Math.round(Math.random()))
+	.map(val => code[val])
+	.reduce((prev, cur) => prev.concat(cur));
 
 let wav = new WaveFile();
-wav.fromScratch(1, samplerate, '32', secondTone);
+wav.fromScratch(1, samplerate, '32', random);
 
 fs.writeFileSync("./test.wav", wav.toBuffer());
-
-const windowSize = 4096;
-
-const fft = new FFT(windowSize);
-
-const input = secondTone.slice(0, windowSize)
-
-const data = fft.toComplexArray(input);
-
-const out = new Array(windowSize);
-
-fft.realTransform(out, data)
-
-module.exports = {};
-
-//console.log(out);
-
