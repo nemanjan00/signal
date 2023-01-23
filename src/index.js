@@ -20,7 +20,7 @@ const random = Array(200)
 	.map(val => code[val])
 	.reduce((prev, cur) => prev.concat(cur));
 
-let wav = new WaveFile();
+const wav = new WaveFile();
 wav.fromScratch(1, samplerate, bitrate, random);
 
 fs.writeFileSync("./test.wav", wav.toBuffer());
