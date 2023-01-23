@@ -21,6 +21,6 @@ const random = Array(200)
 	.reduce((prev, cur) => prev.concat(cur));
 
 let wav = new WaveFile();
-wav.fromScratch(1, samplerate, '32', random);
+wav.fromScratch(1, samplerate, bitrate, random);
 
 fs.writeFileSync("./test.wav", wav.toBuffer());
