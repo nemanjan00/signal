@@ -8,7 +8,7 @@ const tone = require("./tone");
 const samplerate = 44100;
 const bitrate = 32;
 
-const baudrate = 10;
+const baudrate = 20;
 const duration = 1000 / baudrate;
 
 const fftSize = 512;
@@ -18,13 +18,24 @@ const code = [
 	tone(samplerate, 1200, 0.7 * Math.pow(2, bitrate - 1))(duration)
 ];
 
-const randValues = Array(50)
-	.fill(0)
-	.map(() => Math.round(Math.random()));
+//const randValues = Array(50)
+	//.fill(0)
+	//.map(() => Math.round(Math.random()));
 
-const random = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1].concat(randValues)
+const randValues = [
+	1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1,
+	0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1,
+	0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0,
+	1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0,
+	0, 1, 1, 1, 1, 0
+];
+
+const random = [0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1].concat(randValues)
 	.map(val => code[val])
-	.reduce((prev, cur) => prev.concat(cur), []);
+	.reduce((prev, cur) => prev.concat(cur), []).map(el => {
+		return el;
+		//return el / 2 + (Math.random() * Math.pow(2, bitrate - 1) * 0.9) / 2;
+	});
 
 const wav = new WaveFile();
 wav.fromScratch(1, samplerate, bitrate, random);
@@ -36,7 +47,7 @@ const demodulate = (random) => {
 
 	const out = fft.createComplexArray();
 
-	const out1 = Array(random.length - fftSize).fill(0).map((_, pos) => {
+	const sweep = Array(random.length - fftSize).fill(0).map((_, pos) => {
 		fft.realTransform(out, random.slice(pos, pos + fftSize));
 		fft.completeSpectrum(out);
 
@@ -47,16 +58,18 @@ const demodulate = (random) => {
 
 	const swaps = [];
 
-	const scale = 1 / out1.reduce((prev, cur) => (cur > prev)?cur:prev, -Infinity);
+	const scale = 1 / sweep.reduce((prev, cur) => (cur > prev)?cur:prev, -Infinity);
 
 	let prev = 0;
 	let last = 0;
 
 	let result = false;
 
-	out1.map(i => {
+	const booleans = sweep.map(i => {
 		return Math.round(scale * i);
-	}).forEach((cur, i) => {
+	});
+
+	booleans.forEach((cur, i) => {
 		if(result != false) {
 			return;
 		}
@@ -83,16 +96,16 @@ const demodulate = (random) => {
 					return res;
 				});
 
-				const average = times.slice(1).reduce((prev, cur) => prev + cur, 0) / (times.length - 1);
+				const average = times.reduce((prev, cur) => prev + cur, 0) / times.length;
 
 				const symbolTime = average / 2;
 
-				const start = i + average;
+				const start = i + symbolTime;
 
-				const signal = out1.length - start + symbolTime;
+				const signal = booleans.length - start;
 
-				result = Array(Math.ceil(signal / symbolTime)).fill(0).map((_, i) => {
-					return out1[start + i * symbolTime - symbolTime / 2] * scale;
+				result = Array(50).fill(0).map((_, i) => {
+					return booleans[Math.round(start + i * symbolTime + symbolTime / 2)];
 				}).map(e => Math.round(e));
 			}
 		}
@@ -103,4 +116,13 @@ const demodulate = (random) => {
 	return result;
 };
 
-console.log(demodulate(random).join(" ") == randValues.join(" "));
+const data = fs.readFileSync("./sample/output_audio.wav");
+const wav1 = new WaveFile(data).getSamples();
+
+//demodulate(random).forEach((val, i) => {
+demodulate(Array.from(wav1[0]).concat(wav1[1])).forEach((val, i) => {
+	if(randValues[i] != val) {
+		console.log(`Miss ${val} != ${randValues[i]}`);
+	}
+});
+
