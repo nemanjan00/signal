@@ -6,4 +6,10 @@
 
 <!-- vim-markdown-toc GFM -->
 
+* [Todo](#todo)
+
 <!-- vim-markdown-toc -->
+
+## Todo
+
+* Modulator should output waveform stream and not waveform
