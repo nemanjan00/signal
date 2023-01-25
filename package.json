@@ -9,6 +9,7 @@
   "private": false,
   "dependencies": {
     "fft.js": "^4.0.4",
+    "parcel": "^2.8.3",
     "wavefile": "^11.0.0"
   }
 }
