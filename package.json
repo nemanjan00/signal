@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "2-FSK implementation for communicating over speaker/microphone",
   "main": "index.js",
+  "scripts": {
+    "test": "nyc mocha --reporter spec --timeout 60000 tests/index.js"
+  },
   "repository": "git@github.com:nemanjan00/signal.git",
   "author": "nemanjan00 <nemanjan00@gmail.com>",
   "license": "MIT",
@@ -11,5 +14,9 @@
     "fft.js": "^4.0.4",
     "parcel": "^2.8.3",
     "wavefile": "^11.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0"
   }
 }
