@@ -4,12 +4,6 @@ const modulator = require("./modulator")(config);
 const WaveFile = require('wavefile').WaveFile;
 const fs = require("fs");
 
-const tone = require("./tone");
-
-//const randValues = Array(50)
-	//.fill(0)
-	//.map(() => Math.round(Math.random()));
-
 const randValues = [
 	1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1,
 	0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1,
@@ -23,7 +17,7 @@ const random = modulator.modulate(randValues);
 const wav = new WaveFile();
 wav.fromScratch(1, config.samplerate, config.bitrate, random);
 
-fs.writeFileSync("./test.wav", wav.toBuffer());
+fs.writeFileSync("./samples/test.wav", wav.toBuffer());
 
 // Demodulator
 
