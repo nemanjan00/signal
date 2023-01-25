@@ -2,9 +2,16 @@
   "name": "signal",
   "version": "0.0.0",
   "description": "2-FSK implementation for communicating over speaker/microphone",
-  "main": "index.js",
+  "default": "dist/index.html",
+  "targets": {
+    "main": {
+        "includeNodeModules": true
+    }
+  },
   "scripts": {
-    "test": "nyc mocha --reporter spec --timeout 60000 tests/index.js"
+    "test": "nyc mocha --reporter spec --timeout 60000 tests/index.js",
+    "watch": "parcel demo/index.html && parcel watch demo/index.html",
+    "build": "parcel build demo/index.html --dist-dir dist"
   },
   "repository": "git@github.com:nemanjan00/signal.git",
   "author": "nemanjan00 <nemanjan00@gmail.com>",

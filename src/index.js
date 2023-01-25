@@ -1,4 +1,5 @@
 module.exports = {
 	modulator: require("./modulator"),
-	demodulator: require("./demodulator")
+	demodulator: require("./demodulator"),
+	config: require("./config")
 };
