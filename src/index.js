@@ -1,22 +1,10 @@
-const FFT = require("fft.js");
+const config = require("./config")();
+const modulator = require("./modulator")(config);
 
 const WaveFile = require('wavefile').WaveFile;
 const fs = require("fs");
 
 const tone = require("./tone");
-
-const samplerate = 44100;
-const bitrate = 32;
-
-const baudrate = 20;
-const duration = 1000 / baudrate;
-
-const fftSize = 512;
-
-const code = [
-	tone(samplerate, 2200, 0.7 * Math.pow(2, bitrate - 1))(duration),
-	tone(samplerate, 1200, 0.7 * Math.pow(2, bitrate - 1))(duration)
-];
 
 //const randValues = Array(50)
 	//.fill(0)
@@ -30,17 +18,18 @@ const randValues = [
 	0, 1, 1, 1, 1, 0
 ];
 
-const random = [0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1].concat(randValues)
-	.map(val => code[val])
-	.reduce((prev, cur) => prev.concat(cur), []).map(el => {
-		return el;
-		//return el / 2 + (Math.random() * Math.pow(2, bitrate - 1) * 0.9) / 2;
-	});
+const random = modulator.modulate(randValues);
 
 const wav = new WaveFile();
-wav.fromScratch(1, samplerate, bitrate, random);
+wav.fromScratch(1, config.samplerate, config.bitrate, random);
 
 fs.writeFileSync("./test.wav", wav.toBuffer());
+
+// Demodulator
+
+const FFT = require("fft.js");
+
+const fftSize = 512;
 
 const demodulate = (random) => {
 	const fft = new FFT(fftSize);
@@ -123,6 +112,8 @@ const wav1 = new WaveFile(data).getSamples();
 demodulate(Array.from(wav1[0]).concat(wav1[1])).forEach((val, i) => {
 	if(randValues[i] != val) {
 		console.log(`Miss ${val} != ${randValues[i]}`);
+	} else {
+		console.log(`Hit ${val} == ${randValues[i]}`);
 	}
 });
 
