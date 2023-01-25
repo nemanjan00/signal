@@ -3,7 +3,7 @@ const tone = require("../tone");
 module.exports = (config) => {
 	const symbolDuration = config.getSymbolDuration();
 
-	const preamble = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1];
+	const preamble = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1];
 
 	const code = [
 		tone(config.samplerate, 2200, config.volume * Math.pow(2, config.bitrate - 1))(symbolDuration),

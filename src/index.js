@@ -13,9 +13,9 @@ const bitArray = [
 const waveform = modulator.modulate(bitArray);
 
 demodulator.demodulate(waveform).forEach((val, i) => {
-	if(waveform[i] != val) {
-		console.log(`Miss ${val} != ${waveform[i]}`);
+	if(bitArray[i] != val) {
+		console.log(`Miss ${val} != ${bitArray[i]}`);
 	} else {
-		console.log(`Hit ${val} == ${waveform[i]}`);
+		console.log(`Hit ${val} == ${bitArray[i]}`);
 	}
 });
