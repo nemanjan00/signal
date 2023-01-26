@@ -5,7 +5,7 @@
   "default": "dist/index.html",
   "targets": {
     "main": {
-        "includeNodeModules": true
+      "includeNodeModules": true
     }
   },
   "scripts": {
@@ -18,12 +18,16 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "extendable-media-recorder": "^7.1.1",
     "fft.js": "^4.0.4",
     "parcel": "^2.8.3",
     "wavefile": "^11.0.0"
   },
   "devDependencies": {
+    "buffer": "^5.5.0",
+    "extendable-media-recorder-wav-encoder": "^7.0.81",
     "mocha": "^10.2.0",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "ogv": "^1.8.9"
   }
 }

@@ -7,14 +7,32 @@ module.exports = (config) => {
 
 			const out = fft.createComplexArray();
 
+			const maxes = {};
+
 			const sweep = Array(waveform.length - config.fftSize).fill(0).map((_, pos) => {
 				fft.realTransform(out, waveform.slice(pos, pos + config.fftSize));
 				fft.completeSpectrum(out);
 
 				const absOut = out.map(oute => Math.abs(oute));
 
+				const max = absOut.indexOf(Math.max(...absOut));
+
+				maxes[max] = (maxes[max] || 0) + 1;
+
 				return absOut.slice(27, 31).reduce((prev, cur) => prev + cur, 0);
 			});
+
+			console.log(Object.keys(maxes).sort((a, b) => {
+				if(maxes[a] > maxes[b]) {
+					return 1;
+				}
+
+				if(maxes[a] < maxes[b]) {
+					return -1;
+				}
+
+				return 0;
+			}));
 
 			const swaps = [];
 
@@ -59,6 +77,8 @@ module.exports = (config) => {
 						const average = times.reduce((prev, cur) => prev + cur, 0) / times.length;
 
 						const symbolTime = average / 2;
+
+						console.log(symbolTime, config.getSymbolDuration() / 1000 * config.samplerate);
 
 						const start = i + symbolTime;
 
