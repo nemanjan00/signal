@@ -19,20 +19,22 @@ module.exports = (config) => {
 
 				maxes[max] = (maxes[max] || 0) + 1;
 
-				return absOut.slice(27, 31).reduce((prev, cur) => prev + cur, 0);
+				return absOut.slice(26, 28).reduce((prev, cur) => prev + cur, 0);
 			});
 
-			console.log(Object.keys(maxes).sort((a, b) => {
-				if(maxes[a] > maxes[b]) {
-					return 1;
-				}
+			console.log(maxes);
 
-				if(maxes[a] < maxes[b]) {
-					return -1;
-				}
+			//console.log(Object.keys(maxes).sort((a, b) => {
+				//if(maxes[a] > maxes[b]) {
+					//return 1;
+				//}
 
-				return 0;
-			}));
+				//if(maxes[a] < maxes[b]) {
+					//return -1;
+				//}
+
+				//return 0;
+			//}));
 
 			const swaps = [];
 
@@ -73,6 +75,8 @@ module.exports = (config) => {
 
 							return res;
 						});
+
+						console.log("times", times);
 
 						const average = times.reduce((prev, cur) => prev + cur, 0) / times.length;
 

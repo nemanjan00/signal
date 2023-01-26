@@ -55,6 +55,8 @@ const handleSuccess = async function (stream) {
 
 		wav.fromBuffer(mergedArray);
 
+		console.log(wav);
+
 		console.log(demodulator.demodulate(wav.getSamples()));
 	};
 
