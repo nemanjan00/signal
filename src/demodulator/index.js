@@ -22,7 +22,7 @@ module.exports = (config) => {
 				return absOut.slice(26, 28).reduce((prev, cur) => prev + cur, 0);
 			});
 
-			console.log(maxes);
+			//console.log(maxes);
 
 			//console.log(Object.keys(maxes).sort((a, b) => {
 				//if(maxes[a] > maxes[b]) {
@@ -44,6 +44,7 @@ module.exports = (config) => {
 			let last = 0;
 
 			let result = false;
+			let miss = false;
 
 			const booleans = sweep.map(i => {
 				return Math.round(scale * i);
@@ -76,13 +77,15 @@ module.exports = (config) => {
 							return res;
 						});
 
-						console.log("times", times);
+						//console.log("times", times);
 
 						const average = times.reduce((prev, cur) => prev + cur, 0) / times.length;
 
 						const symbolTime = average / 2;
 
-						console.log(symbolTime, config.getSymbolDuration() / 1000 * config.samplerate);
+						miss = Math.abs(symbolTime - (config.getSymbolDuration() / 1000 * config.samplerate));
+
+						//console.log(symbolTime, config.getSymbolDuration() / 1000 * config.samplerate);
 
 						const start = i + symbolTime;
 
@@ -96,6 +99,10 @@ module.exports = (config) => {
 
 				prev = cur;
 			});
+
+			if(miss > 100) {
+				return false;
+			}
 
 			return result;
 		}

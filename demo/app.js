@@ -11,12 +11,13 @@ const demodulator = signal.demodulator(config);
 
 const wav = new WaveFile();
 
-wav.fromScratch(1, config.samplerate, config.bitrate, modulator.modulate([1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]));
+wav.fromScratch(1, config.samplerate, config.bitrate, modulator.modulate([1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0]));
 
 console.log(demodulator.demodulate(wav.getSamples()));
 
 const source = document.querySelector("#audioSource");
 const player = document.querySelector("#audio");
+const log = document.querySelector("#log");
 
 source.src = `data:audio/wav;base64,${wav.toBase64()}`;
 player.load();
@@ -55,9 +56,13 @@ const handleSuccess = async function (stream) {
 
 		wav.fromBuffer(mergedArray);
 
-		console.log(wav);
+		//console.log(wav);
 
-		console.log(demodulator.demodulate(wav.getSamples()));
+		const demodulated = demodulator.demodulate(wav.getSamples());
+
+		if(demodulated) {
+			log.innerText = log.innerText + `\n${JSON.stringify(demodulated)}`;
+		}
 	};
 
 	mediaRecorder.start(5 * 1000);
